@@ -61,6 +61,10 @@ public class PostController {
     public ResponseEntity<?> deletePost(@RequestParam int postID) {
         if(!userService.postExists(postID)) //return ResponseEntity.badRequest().body("Post does not exist");
             return ResponseEntity.badRequest().body(postDoesNotExist);
+        List<Comment> comments = userService.getCommentsForPost(postID);
+        for(Comment comment:comments){
+            userService.deleteComment(comment.getCommentID());
+        }
         userService.deletePost(postID);
         return ResponseEntity.ok("Post deleted");
     }
